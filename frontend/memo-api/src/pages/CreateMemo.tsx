@@ -5,24 +5,26 @@ function CreateMemo() {
     const [text, setText] = useState('')
     const [content, setContent] = useState('')
 
-    const handleClick = () => {
-        fetch('https://click.ecc.ac.jp/ecc/kyamagata/memo-api/backend/',
+
+    const saveMemo = async () => {
+
+        const response = await fetch(
+            "https://click.ecc.ac.jp/ecc/kyamagata/memo-api/backend/index.php",
             {
-                method: 'POST',
-                headers: { "Content-Type": "application/json" },
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({
-                    title: (text),
-                    content: (content)
+                    title: text,
+                    content: content
                 })
-            })
-            .then((response) => response.json())//ここでBodyからJSONを返す
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((e) => {
-                console.log(e)  //エラーをキャッチし表示     
-            })
-    };
+            }
+        );
+        const result = await response.json();
+
+        console.log(result);
+    }
 
     return (
         <>
@@ -32,7 +34,11 @@ function CreateMemo() {
 
             <textarea name="" value={content} onChange={(e) => setContent(e.target.value)}></textarea>
 
-            <button type="submit" onClick={handleClick} >保存</button >
+            <button
+                type="submit"
+                onClick={saveMemo} >
+                保存
+            </button >
 
             <p>{text}</p>
             <p>{content}</p>
